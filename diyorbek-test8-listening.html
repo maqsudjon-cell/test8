@@ -813,8 +813,18 @@ function isCorrect(u, c) {
   if (u === undefined || u === null || u === '') return false;
   const userNorm = normStr(u);
   if (!userNorm) return false;
-  if (Array.isArray(c)) return c.some(v => normStr(v) === userNorm);
-  return normStr(c) === userNorm;
+  const digitsOnly = s => s.replace(/[^\d]/g,'');
+  const userDigits = digitsOnly(userNorm);
+  const tryMatch = v => {
+    const vNorm = normStr(v);
+    if (vNorm === userNorm) return true;
+    // Digit-sequence match (phone numbers, postcodes, etc.)
+    const vDigits = digitsOnly(vNorm);
+    if (userDigits && vDigits && userDigits.length >= 4 && userDigits === vDigits) return true;
+    return false;
+  };
+  if (Array.isArray(c)) return c.some(tryMatch);
+  return tryMatch(c);
 }
 
 function displayCorrect(c) { return Array.isArray(c) ? c[0] : c; }
