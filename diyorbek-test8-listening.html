@@ -217,7 +217,29 @@
     .data-table td:first-child { width: auto; }
     .label-row { grid-template-columns: 1fr; }
   }
-</style>
+
+    .transcript-box {
+      margin-top: 32px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fafafa;
+    }
+    .transcript-box summary {
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: #f0f0f0;
+      user-select: none;
+    }
+    .transcript-box summary:hover {
+      background: #e5e5e5;
+    }
+    .transcript-content {
+      padding: 16px;
+    }
+  </style>
 </head>
 <body>
 
@@ -1056,5 +1078,22 @@ function resetAllAnswers() {
 </script>
 <!-- IELTS Hub auto-loader: name modal + footer + Sheets logging -->
 <script src="https://maqsudjon-cell.github.io/ielts-hub/js/test-page-auto.js" defer></script>
+
+<details class="transcript-box" style="display:none" id="transcriptBox">
+  <summary>📖 Transcript</summary>
+  <div class="transcript-content">
+    <div id="transcriptFallback">
+      <p><a href="transcript-8.pdf" target="_blank">Open transcript PDF ↗</a></p>
+    </div>
+  </div>
+</details>
+
+<script>
+document.getElementById('showTranscript')?.addEventListener('click', function() {
+  var box = document.getElementById('transcriptBox');
+  if (box) box.style.display = 'block';
+});
+</script>
+
 </body>
 </html>
