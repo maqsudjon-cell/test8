@@ -217,29 +217,7 @@
     .data-table td:first-child { width: auto; }
     .label-row { grid-template-columns: 1fr; }
   }
-
-    .transcript-box {
-      margin-top: 32px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #fafafa;
-    }
-    .transcript-box summary {
-      padding: 12px 16px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      background: #f0f0f0;
-      user-select: none;
-    }
-    .transcript-box summary:hover {
-      background: #e5e5e5;
-    }
-    .transcript-content {
-      padding: 16px;
-    }
-  </style>
+</style>
 </head>
 <body>
 
@@ -602,7 +580,7 @@
     </div>
   </section>
 
-  <div class="submit-wrap" id="submitWrap" style="display:none">
+  <div class="submit-wrap">
     <button class="btn-submit" onclick="submitAnswers()">Submit Answers</button>
   </div>
 </main>
@@ -714,22 +692,19 @@ function setSpeed(rate) {
 
 function loadTrackForPart(n) {
   player.src = audioTracks[n];
+  if (audioSrc) audioSrc.src = audioTracks[n];
   audioNum.textContent = n;
   player.load();
 }
 
-
 function switchPart(n) {
-  document.querySelectorAll('.part-section').forEach((el,i) => {
-    el.classList.toggle('active', i+1 === n);
-  });
-  document.querySelectorAll('.part-tab').forEach((el,i) => {
-    el.classList.toggle('active', i+1 === n);
-  });
-  document.getElementById('submitWrap').style.display = n === 4 ? 'block' : 'none';
+  document.querySelectorAll('.part-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.part-tab[data-part="${n}"]`).classList.add('active');
+  document.querySelectorAll('.part-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('part-'+n).classList.add('active');
   if (currentMode !== 'simulation') loadTrackForPart(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
 
 let currentMode = null, currentSimSection = 0, reviewInterval = null, simHasStarted = false;
 
@@ -1079,22 +1054,5 @@ function resetAllAnswers() {
 </script>
 <!-- IELTS Hub auto-loader: name modal + footer + Sheets logging -->
 <script src="https://maqsudjon-cell.github.io/ielts-hub/js/test-page-auto.js" defer></script>
-
-<details class="transcript-box" style="display:none" id="transcriptBox">
-  <summary>📖 Transcript</summary>
-  <div class="transcript-content">
-    <div id="transcriptFallback">
-      <p><a href="transcript-8.pdf" target="_blank">Open transcript PDF ↗</a></p>
-    </div>
-  </div>
-</details>
-
-<script>
-document.getElementById('showTranscript')?.addEventListener('click', function() {
-  var box = document.getElementById('transcriptBox');
-  if (box) box.style.display = 'block';
-});
-</script>
-
 </body>
 </html>
